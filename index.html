@@ -290,7 +290,14 @@
 <p class="text-[0.55rem] text-blue-400 font-bold uppercase tracking-[2px] text-center mt-4 opacity-70 italic">Klik voor meer informatie</p>
     </aside>
 
-    <aside id="right-panel" class="side-panel right">
+    <aside id="right-panel" class="side-panel right flex flex-col">
+    
+    <div class="flex gap-2 mb-4 bg-white/5 p-1 rounded-xl border border-white/10 shrink-0">
+        <button id="btn-main-rws" onclick="switchMainTab('rws')" class="flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all">RWS Actueel</button>
+        <button id="btn-main-elwis" onclick="switchMainTab('elwis')" class="flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all">ELWIS Ruhrort</button>
+    </div>
+
+    <div id="rws-container" class="flex flex-col flex-1 relative">
         <div id="station-search-overlay">
             <div class="flex justify-between items-center mb-4">
                 <span class="text-[0.7rem] font-black text-blue-400 uppercase tracking-widest">Zoek Locatie</span>
@@ -300,21 +307,55 @@
             <div id="station-list" class="flex-1 overflow-y-auto space-y-1 pr-2 custom-scrollbar"></div>
         </div>
 
-        <h2 id="rws-title" class="text-[0.7rem] font-black tracking-[4px] text-blue-400 uppercase mb-4 text-center border-b border-blue-900/30 pb-2">Hoek van Holland Live</h2>
+        <h2 id="rws-title" class="text-[0.7rem] font-black tracking-[4px] text-blue-400 uppercase mb-4 text-center border-b border-blue-900/30 pb-2">Laden...</h2>
         
-        <div class="tab-container">
+        <div class="tab-container shrink-0">
             <button class="tab-btn active" id="tab-hoek" onclick="switchRWS('Hoek van Holland')">Hoek v. H</button>
             <button class="tab-btn" id="tab-dord" onclick="switchRWS('Dordrecht')">Dordrecht</button>
             <button class="tab-btn !flex-none px-4 bg-blue-600 text-white font-bold" onclick="toggleStationSearch()">+</button>
         </div>
 
         <div id="refresh-btn" class="refresh-circle" title="Klik: Verversen | Lang: Auto-Refresh">
-            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"></path></svg>
+            <svg viewBox="0 0 24 24" style="width:20px;height:20px;fill:white"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
         </div>
         
         <div class="web-mask">
-            <iframe id="rws-frame" src="https://waterinfo.rws.nl/publiek/waterhoogte/Hoek-van-Holland%28HOEK%29/details" style="top: -350px; left: -15%; width: 130%;"></iframe>
+            <iframe id="rws-frame" src="" style="top: -200px; left: -15%; width: 130%;"></iframe>
         </div>
+    </div>
+
+<div id="elwis-container" class="hidden flex-col flex-1 relative">
+    
+    <div id="elwis-search-overlay" class="absolute inset-0 bg-[#071126]/95 backdrop-blur-md rounded-2xl p-4 z-50 hidden flex-col">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-[0.7rem] font-black text-blue-400 uppercase tracking-widest">Wissel ELWIS Pegel</span>
+            <button onclick="toggleElwisSearch()" class="text-white bg-red-600/30 px-3 py-1 rounded-lg text-xs font-bold hover:bg-red-600/50 transition-all">SLUITEN</button>
+        </div>
+        <input type="text" id="elwis-filter" onkeyup="filterElwisStations()" placeholder="Typ pegel naam (bijv. Kaub)..." class="w-full bg-white/10 border border-white/20 rounded-xl p-3 mb-4 text-white outline-none focus:border-blue-500 font-bold">
+        <div id="elwis-station-list" class="flex-1 overflow-y-auto space-y-1 pr-2 custom-scrollbar text-[0.75rem]">
+            </div>
+    </div>
+
+    <h2 id="elwis-title" class="text-[0.7rem] font-black tracking-[4px] text-blue-400 uppercase mb-4 text-center border-b border-blue-900/30 pb-2">ELWIS Ruhrort Live</h2>
+    
+<div class="tab-container shrink-0">
+    <button class="tab-btn" id="tab-elwis-Maxau" onclick="switchELWIS('Maxau', this)">Maxau</button>
+    <button class="tab-btn" id="tab-elwis-Oestrich" onclick="switchELWIS('Oestrich', this)">Oestrich</button>
+    <button class="tab-btn active" id="tab-elwis-kaub" onclick="switchELWIS('Kaub', this)">Kaub</button>
+    <button class="tab-btn !flex-none px-4 bg-blue-600 text-white font-bold" onclick="toggleElwisSearch()">+</button>
+</div>
+    
+<div class="web-mask bg-[#020617] overflow-x-auto overflow-y-auto custom-scrollbar flex flex-col relative" style="height: 457px; background: rgba(2, 6, 23, 0.8);">
+    <div id="elwis-loading" class="absolute inset-0 flex items-center justify-center text-blue-400 text-[0.7rem] font-black uppercase tracking-widest animate-pulse z-50">Gegevens ophalen...</div>
+    
+    <img id="elwis-maxau-img" class="w-full h-auto rounded-xl p-1 block" src="" alt="ELWIS Maxau Grafiek">
+
+    <table id="elwis-table" class="w-full text-left text-[0.75rem] text-white hidden min-w-[680px] border-collapse select-none">
+        <thead></thead>
+        <tbody id="elwis-tbody" class="divide-y divide-white/5 font-semibold"></tbody>
+    </table>
+</div>
+
     </aside>
 
     <main class="flex flex-col items-center w-full px-4">
@@ -370,10 +411,7 @@
         <span>Wijgaart</span>
     </a>
 
-    <a href="http://192.168.8.1/" target="win_router" class="card">
-        <img src="pic/router.png" style="height: 50px;">
-        <span>Router</span>
-    </a>
+
 
     <a href="https://gms.rpis.eu/overview" target="win_duisburg" class="card">
         <img src="pic/Duisburg.png" style="height: 55px;">
@@ -731,7 +769,7 @@
 
   <script>
 // STEL JE HUIDIGE VERSIE HIER IN
-        const currentVersion = "1.3.7"; 
+        const currentVersion = "1.3.8"; 
 const githubUrl = "https://raw.githubusercontent.com/scheepsapp/Update_Ms_New_Mexico/refs/heads/main/index.html";
 
 async function checkForUpdates() {
@@ -782,28 +820,24 @@ function toggleWifiQR() {
     const wifiOverlay = document.getElementById('wifi-overlay');
     wifiOverlay.classList.toggle('hidden');
 }
-
-       const stations = [
-            { id: 1, name: "Hoek van Holland", url: "https://waterinfo.rws.nl/publiek/waterhoogte/hoekvanholland/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 2, name: "Dordrecht", url: "https://waterinfo.rws.nl/publiek/waterhoogte/dordrecht.oudemaas.benedenmerwede/details", top: "-360px", left: "-15%", width: "130%" },
-            { id: 3, name: "Lobith", url: "https://waterinfo.rws.nl/publiek/waterhoogte/lobith.bovenrijn.tolkamer/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 4, name: "Nijmegen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/nijmegen.waal/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 5, name: "Tiel", url: "https://waterinfo.rws.nl/publiek/waterhoogte/tiel.waal/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 6, name: "Zaltbommel", url: "https://waterinfo.rws.nl/publiek/waterhoogte/zaltbommel/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 7, name: "Dalem", url: "https://waterinfo.rws.nl/publiek/waterhoogte/dalem/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 8, name: "Werkendam", url: "https://waterinfo.rws.nl/publiek/waterhoogte/werkendam.nieuwemerwede/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 9, name: "Moerdijk", url: "https://waterinfo.rws.nl/publiek/waterhoogte/moerdijk/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 10, name: "Yerseke", url: "https://waterinfo.rws.nl/publiek/waterhoogte/yerseke/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 11, name: "Hansweert", url: "https://waterinfo.rws.nl/publiek/waterhoogte/hansweert/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 12, name: "Bath", url: "https://waterinfo.rws.nl/publiek/waterhoogte/rilland.bath/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 13, name: "Terneuzen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/terneuzen/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 14, name: "Vlissingen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/vlissingen/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 15, name: "Spijkenisse", url: "https://waterinfo.rws.nl/publiek/waterhoogte/spijkenisse.oudemaas/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 16, name: "Vlaardingen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/vlaardingen/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 17, name: "Rotterdam", url: "https://waterinfo.rws.nl/publiek/waterhoogte/rotterdam.nieuwemaas.boerengat/details", top: "-350px", left: "-15%", width: "130%" },
-            { id: 18, name: "Maassluis", url: "https://waterinfo.rws.nl/publiek/waterhoogte/maassluis/details", top: "-350px", left: "-15%", width: "130%" }
-        ];
-
+const stations = [ { id: 1, name: "Hoek van Holland", url: "https://waterinfo.rws.nl/publiek/waterhoogte/hoekvanholland/details", top: "-260px", left: "-15%", width: "130%" }, 
+{ id: 2, name: "Dordrecht", url: "https://waterinfo.rws.nl/publiek/waterhoogte/dordrecht.oudemaas.benedenmerwede/details", top: "-260px", left: "-15%", width: "130%" }, 
+{ id: 3, name: "Lobith", url: "https://waterinfo.rws.nl/publiek/waterhoogte/lobith.bovenrijn.tolkamer/details", top: "-260px", left: "-15%", width: "130%" }, 
+{ id: 4, name: "Nijmegen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/nijmegen.waal/details", top: "-260px", left: "-15%", width: "130%" }, 
+{ id: 5, name: "Tiel", url: "https://waterinfo.rws.nl/publiek/waterhoogte/tiel.waal/details", top: "-260px", left: "-15%", width: "130%" },
+{ id: 6, name: "Zaltbommel", url: "https://waterinfo.rws.nl/publiek/waterhoogte/zaltbommel/details", top: "-350px", left: "-15%", width: "130%" },
+{ id: 7, name: "Dalem", url: "https://waterinfo.rws.nl/publiek/waterhoogte/dalem/details", top: "-350px", left: "-15%", width: "130%" },
+{ id: 8, name: "Werkendam", url: "https://waterinfo.rws.nl/publiek/waterhoogte/werkendam.nieuwemerwede/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 9, name: "Moerdijk", url: "https://waterinfo.rws.nl/publiek/waterhoogte/moerdijk/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 10, name: "Yerseke", url: "https://waterinfo.rws.nl/publiek/waterhoogte/yerseke/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 11, name: "Hansweert", url: "https://waterinfo.rws.nl/publiek/waterhoogte/hansweert/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 12, name: "Bath", url: "https://waterinfo.rws.nl/publiek/waterhoogte/rilland.bath/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 13, name: "Terneuzen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/terneuzen/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 14, name: "Vlissingen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/vlissingen/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 15, name: "Spijkenisse", url: "https://waterinfo.rws.nl/publiek/waterhoogte/spijkenisse.oudemaas/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 16, name: "Vlaardingen", url: "https://waterinfo.rws.nl/publiek/waterhoogte/vlaardingen/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 17, name: "Rotterdam", url: "https://waterinfo.rws.nl/publiek/waterhoogte/rotterdam.nieuwemaas.boerengat/details", top: "-350px", left: "-15%", width: "130%" }, 
+{ id: 18, name: "Maassluis", url: "https://waterinfo.rws.nl/publiek/waterhoogte/maassluis/details", top: "-350px", left: "-15%", width: "130%" } ];
 
         let favorites = JSON.parse(localStorage.getItem('ship_favorites')) || [];
 
@@ -889,7 +923,12 @@ function toggleWifiQR() {
         }, 1000); });
         refreshBtn.addEventListener('mouseup', () => { clearTimeout(pressTimer); refreshRWS(); });
 
-        window.onload = () => { switchRWS('Hoek van Holland'); updateClock(); setInterval(updateClock, 1000); };
+window.onload = () => {
+    switchRWS('Hoek van Holland');
+    updateClock();
+    setInterval(updateClock, 1000);
+    initStationSearch(); // of iets vergelijkbaars
+};
 
 
 function toggleSettingsMenu() {
@@ -943,7 +982,7 @@ function toggleWifiQR() {
     overlay.classList.toggle('hidden');
 }
 
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzcC43FIhwTXl2yhL9fX6rrmNitOWhj06mgHSuTGQrVnBeRa9111WOwLfCQVSscihm0Dg/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxhfxioLpHgg9GwGgsO1kNYbKyDk9KoRRvoodpY-hyUokfQbdIasr6o5ovk0w9nTubrMw/exec";
 
 function toggleHelpdesk() {
     const modal = document.getElementById('helpdesk-modal');
@@ -983,6 +1022,231 @@ document.getElementById('helpdesk-form').addEventListener('submit', async functi
         btn.style.opacity = '1';
     }
 });
+let elwisLoaded = false;
+var huidigeElwisPegel = "Kaub"; 
+
+
+
+const elwisStations = [
+    { name: "Maxau", info: "" },  
+    { name: "Oestrich", info: "" },
+    { name: "Kaub", info: "" },
+    { name: "Koblenz", info: "" },
+    { name: "Köln", info: "" },
+    { name: "Düsseldorf", info: "" },
+    { name: "Ruhrort", info: "" },
+    { name: "Emmerich", info: "" },
+  
+    
+
+
+];
+
+// 2. Schakelen tussen de hoofdtabs RWS en ELWIS (Nu volledig waterdicht voor Maxau)
+function switchMainTab(tab) {
+    const rwsCont = document.getElementById('rws-container');
+    const elwisCont = document.getElementById('elwis-container');
+    const btnRws = document.getElementById('btn-main-rws');
+    const btnElwis = document.getElementById('btn-main-elwis');
+
+    if (tab === 'rws') {
+        const rightPanel = document.getElementById('right-panel');
+        if (rightPanel) rightPanel.style.width = "420px";
+        
+        if (rwsCont) { rwsCont.classList.remove('hidden'); rwsCont.classList.add('flex'); }
+        if (elwisCont) { elwisCont.classList.add('hidden'); elwisCont.classList.remove('flex'); }
+        
+        if (btnRws) btnRws.className = "flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all";
+        if (btnElwis) btnElwis.className = "flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+    } else {
+        if (rwsCont) { rwsCont.classList.add('hidden'); rwsCont.classList.remove('flex'); }
+        if (elwisCont) { elwisCont.classList.remove('hidden'); elwisCont.classList.add('flex'); }
+        
+        if (btnElwis) btnElwis.className = "flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg bg-blue-600 text-white shadow-[0_0_15px_rgba(59,130,246,0.4)] transition-all";
+        if (btnRws) btnRws.className = "flex-1 py-2 text-[0.65rem] font-black uppercase rounded-lg text-slate-400 hover:text-white transition-all";
+        
+        // FIX: Activeer direct de actieve subtab, zodat Maxau of de tabel direct geladen wordt
+        switchELWIS(huidigeElwisPegel);
+    }
+}
+
+// 3. Open of sluit de ELWIS zoeklijst overlay
+function toggleElwisSearch() {
+    const overlay = document.getElementById('elwis-search-overlay');
+    if (!overlay) return;
+    overlay.classList.toggle('hidden');
+    if (!overlay.classList.contains('hidden')) {
+        document.getElementById('elwis-filter').value = '';
+        initElwisStationSearch(); 
+        document.getElementById('elwis-filter').focus();
+    }
+}
+
+// 4. Bouw de klikbare pegels op in de overlay
+function initElwisStationSearch() {
+    const lijstDiv = document.getElementById('elwis-station-list');
+    if (!lijstDiv) return;
+    lijstDiv.innerHTML = '';
+    
+    elwisStations.forEach(station => {
+        const btn = document.createElement('button');
+        btn.className = "w-full text-left p-3 rounded-xl bg-white/5 hover:bg-blue-600/30 border border-white/5 hover:border-blue-500/50 flex justify-between items-center transition-all mb-1 uppercase font-bold tracking-wider";
+        btn.innerHTML = `
+            <span>${station.name}</span>
+            <span class="text-[0.6rem] text-slate-400 font-mono normal-case font-normal">${station.info}</span>
+        `;
+        btn.onclick = () => {
+            switchELWIS(station.name);
+            toggleElwisSearch();
+        };
+        lijstDiv.appendChild(btn);
+    });
+}
+
+// 5. Live filteren van de pegels tijdens het typen
+function filterElwisStations() {
+    const query = document.getElementById('elwis-filter').value.toUpperCase();
+    const knoppen = document.getElementById('elwis-station-list').getElementsByTagName('button');
+    
+    for (let i = 0; i < knoppen.length; i++) {
+        const txt = knoppen[i].textContent || knoppen[i].innerText;
+        knoppen[i].style.display = txt.toUpperCase().includes(query) ? "" : "none";
+    }
+}
+
+// 6. Wisselen van actieve ELWIS pegel
+function switchELWIS(pegelNaam) {
+    huidigeElwisPegel = pegelNaam.charAt(0).toUpperCase() + pegelNaam.slice(1).toLowerCase();
+    
+    if (huidigeElwisPegel === "Koln" || huidigeElwisPegel === "Köln") {
+        huidigeElwisPegel = "Köln";
+    }
+
+    const elwisTabel = document.getElementById('elwis-table');
+    const elwisLader = document.getElementById('elwis-loading');
+    const maxauImg = document.getElementById('elwis-maxau-img');
+    const rightPanel = document.getElementById('right-panel');
+
+    const titleEl = document.getElementById('elwis-title');
+    if (titleEl) titleEl.textContent = "ELWIS " + huidigeElwisPegel.toUpperCase() + " Live";
+
+    // === SPECIFIEKE UITZONDERING VOOR MAXAU ===
+    if (huidigeElwisPegel === "Maxau") {
+        if (elwisLader) elwisLader.classList.add('hidden');
+        if (elwisTabel) elwisTabel.classList.add('hidden');
+        if (rightPanel) rightPanel.style.width = "700px";
+
+        if (maxauImg) {
+            maxauImg.classList.remove('hidden');
+            // Schone URL-opbouw voor weserv.nl met een unieke cachebuster &cb aan het eind
+            maxauImg.src = "https://images.weserv.nl/?url=https://www.hvz.baden-wuerttemberg.de/gifs/09016-2001.GIF&cb=" + Date.now();
+        }
+
+        stijlActieveElwisTab();
+        return;
+    }
+    // === EINDE UITZONDERING MAXAU ===
+
+    if (maxauImg) maxauImg.classList.add('hidden');  
+    if (rightPanel) rightPanel.style.width = "750px"; 
+    
+    if (elwisLader) elwisLader.classList.remove('hidden');
+    if (elwisTabel) elwisTabel.classList.add('hidden');
+    
+    stijlActieveElwisTab();
+    haalElwisDataOp();
+}
+
+// 7. Tab-knoppen de actieve 'blauwe' kleur geven
+function stijlActieveElwisTab() {
+    if (document.getElementById('tab-elwis-kaub')) {
+        document.getElementById('tab-elwis-kaub').classList.toggle('active', huidigeElwisPegel === 'Kaub');
+    }
+    if (document.getElementById('tab-elwis-Oestrich')) {
+        document.getElementById('tab-elwis-Oestrich').classList.toggle('active', huidigeElwisPegel === 'Oestrich');
+    }
+    if (document.getElementById('tab-elwis-Maxau')) {
+        document.getElementById('tab-elwis-Maxau').classList.toggle('active', huidigeElwisPegel === 'Maxau');
+    }
+}
+
+// 8. Haal tabeldata op via Google Script JSONP
+function haalElwisDataOp() {
+    var oudScript = document.getElementById('elwis-script-loader');
+    if (oudScript) { oudScript.remove(); }
+
+    var scriptURL = "https://script.google.com/macros/s/AKfycbwMef342JSPL_dofw4e8vs8xErkn29ou7cSv2jKR_n8rbM4yDJhndD6pBGs0JQ0C_B9Dg/exec";
+    var volledigeURL = scriptURL + "?tab=" + encodeURIComponent(huidigeElwisPegel);
+
+    var nieuwScript = document.createElement('script');
+    nieuwScript.id = 'elwis-script-loader';
+    nieuwScript.src = volledigeURL;
+    
+    document.body.appendChild(nieuwScript);
+}
+
+// 9. Hulpfunctie voor styling tabel-trends
+function formatteerStandDashboard(stand, trend) {
+    let s = stand ? stand.toString().trim() : "";
+    let t = trend ? trend.toString().trim() : "";
+    if (s === "" || s === "--") return "<span class='text-slate-500 font-normal'>--</span>";
+    let trendHtml = "";
+    if (t && t !== "--" && t !== "(--)") {
+        let kl = t.includes("-") ? "text-red-400" : (t.includes("+") ? "text-emerald-400" : "text-slate-400");
+        trendHtml = `<span class="${kl} ml-1 font-bold font-mono text-[0.65rem]">${t}</span>`;
+    }
+    return `<span class="font-bold text-white font-mono">${s}</span>${trendHtml}`;
+}
+
+// 9. De callback functie die de middelgrote, gelijk verdeelde tabel opbouwt
+function bouwElwisTabel(data) {
+    document.getElementById('elwis-loading').classList.add('hidden');
+    const tabel = document.getElementById('elwis-table');
+    tabel.classList.remove('hidden');
+
+    const thead = tabel.querySelector('thead');
+    thead.innerHTML = `
+        <tr class="text-[0.65rem] uppercase tracking-wider text-slate-300">
+            <th rowspan="2" class="p-1 border-b border-white/10 elwis-corner text-center">Uhr</th>
+            <th class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.gisteren || "Gist."}</th>
+            <th colspan="2" class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold text-blue-400 bg-blue-950/20">Heute (${data.datums.vandaag || "Vand."})</th>
+            <th class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.morgen || "Morg."}</th>
+            <th colspan="2" class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold text-amber-300 bg-amber-950/20">Overmorg.</th>
+            <th class="p-1 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.dagNaOvermorgen || "Dag +3"}</th>
+        </tr>
+        <tr class="bg-blue-900/40 text-[0.55rem] tracking-widest text-slate-400 font-black uppercase border-b border-white/10">
+            <th class="p-1 border-r border-white/10 text-center">Stand</th>
+            <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Actueel</th>
+            <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Verw.</th>
+            <th class="p-1 border-r border-white/10 text-center">Verw.</th>
+            <th class="p-1 border-r border-white/10 text-center text-amber-300 bg-amber-950/20">Voorsp.</th>
+            <th class="p-1 border-r border-white/10 text-center text-amber-400 bg-amber-950/20">Schat.</th>
+            <th class="p-1 text-center">Verw.</th>
+        </tr>
+    `;
+
+    const tbody = document.getElementById('elwis-tbody');
+    tbody.innerHTML = '';
+    
+data.rijen.forEach(rij => {
+        const tr = document.createElement("tr");
+        // text-[0.7rem] maakt de letters net iets groter en duidelijker
+        tr.className = "hover:bg-white/5 border-b border-white/5 transition-colors whitespace-nowrap text-[0.7rem]";
+        tr.innerHTML = `
+            <td class="p-2 elwis-sticky-col font-mono font-bold text-blue-300 text-center">${rij.tijd}</td>
+            <td class="p-2 border-r border-white/10 text-center">${formatteerStandDashboard(rij.gistStand, rij.gistTrend)}</td>
+            <td class="p-2 border-r border-white/10 text-center bg-blue-900/5">${formatteerStandDashboard(rij.vandStand, rij.vandTrend)}</td>
+            <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-blue-200 bg-blue-900/5">${rij.vandVerwachting}</td>
+            <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-slate-200">${rij.morgVerwachting}</td>
+            <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-amber-300 bg-amber-900/5">${rij.overmorgVoorsp}</td>
+            <td class="p-2 border-r border-white/10 text-center font-medium font-mono italic text-slate-400 bg-amber-900/5">${rij.overmorgSchat}</td>
+            <td class="p-2 text-center font-bold font-mono text-slate-300">${rij.laatsteDag}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+            elwisLoaded = true;
+        }
     </script>
 
 
