@@ -771,7 +771,7 @@
 
   <script>
 // STEL JE HUIDIGE VERSIE HIER IN
-        const currentVersion = "1.4.1"; 
+        const currentVersion = "1.4.2"; 
 const githubUrl = "https://raw.githubusercontent.com/scheepsapp/Update_Ms_New_Mexico/refs/heads/main/index.html";
 
 async function checkForUpdates() {
@@ -1035,8 +1035,8 @@ const elwisStations = [
     { name: "Kaub", info: "" },
     { name: "Koblenz", info: "" },
     { name: "Köln", info: "" },
-    { name: "Düsseldorf", info: "" },
-    { name: "Ruhrort", info: "" },
+    { name: "Dusseldorf", info: "" },
+    { name: "Duisburg", info: "" },
     { name: "Emmerich", info: "" },
   
     
@@ -1141,7 +1141,7 @@ function switchELWIS(pegelNaam) {
         if (maxauImg) {
             maxauImg.classList.remove('hidden');
             // Schone URL-opbouw voor weserv.nl met een unieke cachebuster &cb aan het eind
-            maxauImg.src = "https://images.weserv.nl/?url=https://www.hvz.baden-wuerttemberg.de/gifs/09016-2001.GIF&cb=" + Date.now();
+            maxauImg.src = "https://script.google.com/macros/s/AKfycbywNjmjT3c16pQf2pEdtZnBARo5aUHFR9buzboq4j1zuPbzyOYHyty2xYeNvV-RyZ7kiQ/exec" + Date.now();
         }
 
         stijlActieveElwisTab();
@@ -1177,7 +1177,7 @@ function haalElwisDataOp() {
     var oudScript = document.getElementById('elwis-script-loader');
     if (oudScript) { oudScript.remove(); }
 
-    var scriptURL = "https://script.google.com/macros/s/AKfycbzeqQiuljw2KCxe54ZntwO0-nlZfMB04hUoqlURKHp2qpk6Ujjvg_4gLMTFhy3vjJ5GQA/exec";
+    var scriptURL = "https://script.google.com/macros/s/AKfycbwL5pCqpCv_b3LeNRsNtb3zuVJNXbHMWlGNrbiaZ60JzGdPLqF6ytTOT8h-eR__Au00Aw/exec";
     var volledigeURL = scriptURL + "?tab=" + encodeURIComponent(huidigeElwisPegel);
 
     var nieuwScript = document.createElement('script');
@@ -1213,16 +1213,16 @@ function bouwElwisTabel(data) {
             <th class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.gisteren || "Gist."}</th>
             <th colspan="2" class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold text-blue-400 bg-blue-950/20">Heute (${data.datums.vandaag || "Vand."})</th>
             <th class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.morgen || "Morg."}</th>
-            <th colspan="2" class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold text-amber-300 bg-amber-950/20">Overmorg.</th>
-            <th class="p-1 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.dagNaOvermorgen || "Dag +3"}</th>
+            <th colspan="2" class="p-1 border-r border-white/10 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.overmorgen || "dag2."}</th>      
+          <th class="p-1 border-b border-white/10 text-center elwis-header-sticky font-bold">${data.datums.dagNaOvermorgen || "Dag +3"}</th>
         </tr>
         <tr class="bg-blue-900/40 text-[0.55rem] tracking-widest text-slate-400 font-black uppercase border-b border-white/10">
             <th class="p-1 border-r border-white/10 text-center">Stand</th>
             <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Actueel</th>
             <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Verw.</th>
             <th class="p-1 border-r border-white/10 text-center">Verw.</th>
-            <th class="p-1 border-r border-white/10 text-center text-amber-300 bg-amber-950/20">Voorsp.</th>
-            <th class="p-1 border-r border-white/10 text-center text-amber-400 bg-amber-950/20">Schat.</th>
+            <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Voorsp.</th>
+            <th class="p-1 border-r border-white/10 text-center text-blue-300 bg-blue-950/20">Schat.</th>
             <th class="p-1 text-center">Verw.</th>
         </tr>
     `;
@@ -1240,8 +1240,8 @@ data.rijen.forEach(rij => {
             <td class="p-2 border-r border-white/10 text-center bg-blue-900/5">${formatteerStandDashboard(rij.vandStand, rij.vandTrend)}</td>
             <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-blue-200 bg-blue-900/5">${rij.vandVerwachting}</td>
             <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-slate-200">${rij.morgVerwachting}</td>
-            <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-amber-300 bg-amber-900/5">${rij.overmorgVoorsp}</td>
-            <td class="p-2 border-r border-white/10 text-center font-medium font-mono italic text-slate-400 bg-amber-900/5">${rij.overmorgSchat}</td>
+                      <td class="p-2 border-r border-white/10 text-center font-bold font-mono text-slate-200">${rij.overmorgVoorsp}</td>
+            <td class="p-2 border-r border-white/10 text-center font-medium font-mono italic text-slate-400 bg-blue-900/5">${rij.overmorgSchat}</td>
             <td class="p-2 text-center font-bold font-mono text-slate-300">${rij.laatsteDag}</td>
         `;
         tbody.appendChild(tr);
@@ -1252,3 +1252,7 @@ data.rijen.forEach(rij => {
     </script>
 </body>
 </html>
+
+
+
+
